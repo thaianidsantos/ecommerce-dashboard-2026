@@ -52,17 +52,16 @@ Enquanto isso, foram retirados dos cálculos de receita e lucro realizados, evit
 Execução do Tratamento de Dados:
 Amostragem: 200.000 registros transacionais brutas contendo informações de clientes, pedidos, pagamentos, entregas, devoluções e valores financeiros.
 
-Análise Exploratória (EDA) & Diagnóstico de Qualidade Antes da aplicação de qualquer filtro, a base passou por um diagnóstico inicial para identificar inconsistências financeiras e operacionais: Conflitos de Status: Identificação de pedidos marcados como Cancelado ou Devolvido, porém mantendo valores em campos de receita/lucro. Falhas de Pagamento: Pedidos em que o status de pagamento constava como Pendente ou Falhou, mas o pedido estava com status de entrega concluída.Distorção de Indicadores: Constatação de que a soma direta da coluna de receita bruta distorcia o resultado real do negócio por incluir faturamento não realizado.
+Análise Exploratória (EDA) & Diagnóstico de Qualidade Antes da aplicação de qualquer filtro, a base passou por um diagnóstico inicial para identificar inconsistências financeiras e operacionais: Conflitos de Status: Identificação de pedidos marcados como Cancelado ou Devolvido, porém mantendo valores em campos de receita/lucro. Falhas de Pagamento: Pedidos em que o status de pagamento constava como Pendente ou Falhou, mas o pedido estava com status de entrega concluída. Distorção de Indicadores: Constatação de que a soma direta da coluna de receita bruta distorcia o resultado real do negócio por incluir faturamento não realizado.
 
-Arquitetura da Solução & Regras de Negócio em vez de excluir os registros inconsistentes da base original (o que apagaria históricos valiosos sobre perdas e gargalos), a estratégia adotada dividiu o pipeline de dados em camadas: Camada Raw (Dados Brutos): Preservação dos 200.000 registros originais para análises operacionais (motivos de devolução, taxa de cancelamento, falhas de checkout).Camada Refined (Regra de Elegibilidade): Criação da regra booleana para filtrar a Receita Realizada:$$\text{Receita Realizada} = (\text{Status} = \text{"Entregue"}) \land (\text{Pagamento} = \text{"Confirmado"}) \land (\text{Devolução} = \text{"Não"})$$
+Arquitetura da Solução & Regras de Negócio em vez de excluir os registros inconsistentes da base original (o que apagaria históricos valiosos sobre perdas e gargalos), a estratégia adotada dividiu o pipeline de dados em camadas: Camada Raw (Dados Brutos): Preservação dos 200.000 registros originais para análises operacionais (motivos de devolução, taxa de cancelamento, falhas de checkout). Camada Refined (Regra de Elegibilidade): Criação da regra booleana para filtrar a Receita Realizada:$$\text{Receita Realizada} = (\text{Status} = \text{"Entregue"}) \land (\text{Pagamento} = \text{"Confirmado"}) \land (\text{Devolução} = \text{"Não"})$$
 
-Execução do Tratamento e Filtragem (Pipeline)Padronização de Tipos e Formatos:Conversão de datas para formato padrão ISO.Limpeza de valores nulos e tratamento de strings em colunas de status.Aplicação das Flags de Inclusão em KPIs:Criação de coluna auxiliar Is_Receita_Realizada (1 para válido, 0 para inválido).
+Execução do Tratamento e Filtragem (Pipeline) Padronização de Tipos e Formatos: Conversão de datas para formato padrão ISO. Limpeza de valores nulos e tratamento de strings em colunas de status. Aplicação das Flags de Inclusão em KPIs: Criação de coluna auxiliar Is_Receita_Realizada (1 para válido, 0 para inválido).
 Resultado do Filtro:112.260 registros (56,1%) qualificados como válidos para o cálculo do faturamento real.87.740 registros (43,9%) isolados para análise exclusiva de perdas e falhas operacionais.
 
 Consolidação das Métricas Financeiras: Cálculo final sobre a base tratada: Receita Realizada: US$ 59,37M 
-Lucro Realizado: US$ 17,12M Margem de Lucro: 28,83%5. 
+Lucro Realizado: US$ 17,12M Margem de Lucro: 28,83%. 
 
-Integração com a Camada de Apresentação (Dashboard)Os dados agregados e validados foram estruturados no frontend interativo (index.html e scripts de visualização) disponibilizado no Dashboard E-commerce 2026 Ao Vivo.
 
 📊 3. Resultado da tratativa
 
