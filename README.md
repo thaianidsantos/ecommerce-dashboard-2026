@@ -57,7 +57,10 @@ Análise Exploratória (EDA) & Diagnóstico de Qualidade Antes da aplicação de
 Arquitetura da Solução & Regras de Negócio em vez de excluir os registros inconsistentes da base original (o que apagaria históricos valiosos sobre perdas e gargalos), a estratégia adotada dividiu o pipeline de dados em camadas: Camada Raw (Dados Brutos): Preservação dos 200.000 registros originais para análises operacionais (motivos de devolução, taxa de cancelamento, falhas de checkout). Camada Refined (Regra de Elegibilidade): Criação da regra booleana para filtrar a Receita Realizada:$$\text{Receita Realizada} = (\text{Status} = \text{"Entregue"}) \land (\text{Pagamento} = \text{"Confirmado"}) \land (\text{Devolução} = \text{"Não"})$$
 
 Execução do Tratamento e Filtragem (Pipeline) Padronização de Tipos e Formatos: Conversão de datas para formato padrão ISO. Limpeza de valores nulos e tratamento de strings em colunas de status. Aplicação das Flags de Inclusão em KPIs: Criação de coluna auxiliar Is_Receita_Realizada (1 para válido, 0 para inválido).
-Resultado do Filtro:112.260 registros (56,1%) qualificados como válidos para o cálculo do faturamento real.87.740 registros (43,9%) isolados para análise exclusiva de perdas e falhas operacionais.
+
+Resultado do Filtro:
+112.260 registros (56,1%) qualificados como válidos para o cálculo do faturamento real.
+87.740 registros (43,9%) isolados para análise exclusiva de perdas e falhas operacionais.
 
 Consolidação das Métricas Financeiras: Cálculo final sobre a base tratada: Receita Realizada: US$ 59,37M 
 Lucro Realizado: US$ 17,12M Margem de Lucro: 28,83%. 
